@@ -371,8 +371,9 @@ func GenerateGoSchema(sref *base.SchemaProxy, path []string) (Schema, error) {
 			}
 
 			// We've got an object with some properties.
-			for _, pName := range SortedKeys(schema.Properties) {
-				p := schema.Properties.Value(pName)
+			for pair := schema.Properties.First(); pair != nil; pair = pair.Next() {
+				pName := pair.Key()
+				p := pair.Value()
 				propertyPath := append(path, pName)
 				pSchema, err := GenerateGoSchema(p, propertyPath)
 				if err != nil {
