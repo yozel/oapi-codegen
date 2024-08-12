@@ -226,12 +226,12 @@ func mergeOpenapiSchemas(s1, s2 base.Schema, allOf bool) (base.Schema, error) {
 
 	// We merge all properties
 	result.Properties = orderedmap.New[string, *base.SchemaProxy]()
-	for k, v := range ToMap(s1.Properties) {
-		result.Properties.Set(k, v)
+	for p := s1.Properties.First(); p != nil; p = p.Next() {
+		result.Properties.Set(p.Key(), p.Value())
 	}
-	for k, v := range ToMap(s2.Properties) {
+	for p := s2.Properties.First(); p != nil; p = p.Next() {
 		// TODO: detect conflicts
-		result.Properties.Set(k, v)
+		result.Properties.Set(p.Key(), p.Value())
 	}
 
 	if isAdditionalPropertiesExplicitFalse(&s1) || isAdditionalPropertiesExplicitFalse(&s2) {
